@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.poly.entity.Cart;
+import com.poly.bean.Cart;
 
 public interface  CartRepository extends JpaRepository<Cart, Long> {
 	

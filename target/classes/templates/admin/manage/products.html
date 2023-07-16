@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/layout/layout :: dynamic(~{::main})}">
+
+<body class="is-preload">
+    <!-- content -->
+    <main>
+        <h1 class="text-center mb-2" style="margin-top: -50px;">Quản lý sách</h1>
+        <div class="row col-md-12 justify-content-center">
+            <form action="" class="col-md-8 mb-2">
+                <div class="form-group">
+                    <label>Mã Sách</label>
+                    <input type="text" class="form-control" id="id" />
+                </div>
+                <div class="form-group">
+                    <label>Tên sách</label>
+                    <input type="text" class="form-control" id="name" />
+                </div>
+                <div class="form-group">
+                    <label>Tác giả</label>
+                    <input type="text" class="form-control" id="author" />
+                </div>
+                <div class="form-group">
+                    <label>Giá</label>
+                    <input type="number" class="form-control" min="0" id="price" />
+                </div>
+
+                <div class="form-group">
+                    <label path="quantity">Số lượng</label>
+                    <input type="number" class="form-control" min="0" id="quantity" />
+                </div>
+
+                <div class="form-group">
+                    <label>Mô tả</label>
+                    <textarea cols="30" rows="5" class="form-control" id="description" path="description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <img class="ml-5" id="img" src="/image/${product.image}" width="100%"
+                        style="border: 1px solid rgba(0, 0, 0, 0.067); min-width: 200px !important; min-height: 250px!important;" />
+                    <input type="file" id="imgInput" name="image" style="cursor: pointer;" class="form-control-file mt-2" />
+                </div>
+
+                <hr style="max-height: 2px !important;background-color: black;">
+
+                <div class="row col-md-12 justify-content-center">
+                    <button class="btn btn-success" style="border-radius: 20px;">Thêm
+                        sách</button>
+                    <button class="btn btn-warning mx-3" style="border-radius: 20px;">Cập
+                        nhật</button>
+                    <button type="submit" class="btn btn-primary" style="border-radius: 20px;">Làm
+                        mới</button>
+                </div>
+            </form>
+        </div>
+
+        <form action="" class="row mt-5">
+            <div class="form-group row col-md-12 justify-content-center">
+                <label class="col-form-label"><strong>Tìm kiếm sách:</strong></label>
+                <div class="col-md-4">
+                    <input type="search" class="form-control" placeholder="Nhập tên sách">
+                </div>
+                <button type="submit" class="btn btn-success">Tìm kiếm</button>
+            </div>
+        </form>
+
+        <table class="table table-hover mt-2 mb-5">
+            <thead class="thead-dark text-center">
+                <tr>
+                    <th class="col-md-1">STT</th>
+                    <th class="col-md-2">Tên sách</th>
+                    <th class="col-md-1">Giá</th>
+                    <th class="col-md-1">Số lượng</th>
+                    <th class="col-md-2">Hình</th>
+                    <th class="col-md-1">Like</th>
+                    <th class="col-md-2">Tác giả</th>
+                    <th class="col-md-1"></th>
+
+                </tr>
+            </thead>
+            <tbody class="bg-light">
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-center"><img src="/image/${list.image}" width="100%"></td>
+                    <td></td>
+                    <td></td>
+                    <td><a href="/admin/manage/product/getform/${list.id}">Chi
+                            tiết</a>|
+                        <a href="/admin/manage/product/remove/${list.id}" onclick="myMessage()">Xóa</a>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="row col-md-12 justify-content-center mb-4">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <c:if test="${list.number == 0}">
+                        <li class="page-item"><a class="page-link" href="" style="pointer-events: none;">&lt;&lt;</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="" style="pointer-events: none;">&lt;</a></li>
+                    </c:if>
+                    <c:if test="${list.number > 0}">
+                        <li class="page-item"><a class="page-link" href="/admin/manage/user?p=0">&lt;&lt;</a></li>
+                        <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number-1}">&lt;</a>
+                        </li>
+                    </c:if>
+                    <c:forEach varStatus="i" begin="0" end="${list.totalPages-1}">
+                        <li class="page-item"><a a class="page-link" href="/admin/manage/user?p=${i.index}">${i.index +
+                                1}</a></li>
+                    </c:forEach>
+
+                    <c:if test="${list.number < list.totalPages - 1}">
+                        <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number+1}">&gt;</a>
+                        </li>
+                        <li class="page-item"><a class="page-link"
+                                href="/admin/manage/user?p=${list.totalPages-1}">&gt;&gt;</a></li>
+                    </c:if>
+                    <c:if test="${list.number == list.totalPages - 1}">
+                        <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number+1}"
+                                style="pointer-events: none;">&gt;</a></li>
+                        <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.totalPages-1}"
+                                style="pointer-events: none;">&gt;&gt;</a></li>
+                    </c:if>
+                </ul>
+            </nav>
+        </div>
+    </main>>
+    <!-- content -->
+</html>

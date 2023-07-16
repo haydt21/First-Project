@@ -7,8 +7,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.poly.entity.Category;
-import com.poly.entity.Product;
+import com.poly.bean.Category;
+import com.poly.bean.Product;
 	
 public interface  ProductRepository extends JpaRepository<Product, String> {
 

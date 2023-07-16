@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.poly.entity.OrderDetail;
+import com.poly.bean.OrderDetail;
 
 public interface  OrderDetailRepository extends JpaRepository<OrderDetail, String> {
 

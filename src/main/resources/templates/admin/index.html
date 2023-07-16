@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{/admin/layout/layout :: dynamic(~{::main})}">
+<main class="services">
+	<div class="container-fluid">
+		<div class="row">
+			<!-- muốn chô thê tag thì vào css chỉnh lại hình trong file templatemo-style.css-->
+			<div class="col-md-4">
+				<a href="./QuanLyNguoiDung.html">
+					<div class="service-item first-item" style="height: 250px !important;">
+						<div class="icon"></div>
+						<h4>Số lượng tài khoàng</h4>
+						<p>100</p>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-md-4">
+				<a href="./QuanLyHoaDon.html">
+					<div class="service-item second-item" style="height: 250px !important;">
+						<div class="icon"></div>
+						<h4>Số lượng hóa đơn chưa xác nhận</h4>
+						<p>100</p>
+					</div>
+				</a>
+			</div>
+
+			<div class="col-md-4">
+				<a href="./QuanLyHoaDon.html">
+					<div class="service-item third-item" style="height: 250px !important;">
+						<div class="icon"></div>
+						<h4>Số lượng hóa đơn đã thanh toán</h4>
+						<p>100</p>
+					</div>
+				</a>
+			</div>
+
+		</div>
+	</div>
+</main>
+</body>
+
+
+</html>

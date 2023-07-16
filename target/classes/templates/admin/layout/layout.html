@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="dynamic(view)">
+
+<head th:insert="~{/admin/component/head.html :: head}">
+</head>
+
+<body class="is-preload">
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Main -->
+        <div id="main">
+            <div class="inner">
+                <!-- Header -->
+                <header th:insert="~{/admin/component/header.html :: header}">
+                </header>
+                <!-- Services -->
+                <main th:replace="${view}"></main>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div id="sidebar">
+
+            <div class="inner">
+
+                <!-- Search Box -->
+                <section class="alt py-3">
+                    <h1 class="text-danger my-4">logo</h1>
+                </section>
+
+                <!-- Menu -->
+                <nav th:insert="~{/admin/component/nav.html :: nav}"></nav>
+                <!-- Footer -->
+                <footer th:insert="~{/admin/component/footer.html :: footer}"></footer>
+
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script th:src="@{/bootstrap4-2/jquery/jquery.min.js}"></script>
+    <script th:src="@{/bootstrap4-2/bootstrap/js/bootstrap.bundle.min.js}"></script>
+
+    <script th:src="@{/style/js/browser.min.js}"></script>
+    <script th:src="@{/style/js/breakpoints.min.js}"></script>
+    <script th:src="@{/style/js/transition.js}"></script>
+    <script th:src="@{/style/js/owl-carousel.js}"></script>
+    <script th:src="@{/style/js/custom.js}"></script>
+    <script>
+    const inputImg = document.getElementById('imgInput')
+	const img = document.getElementById('img')
+
+	function getImg(event){
+
+	     const file = event.target.files[0]; // 0 = get the first file
+
+	     // console.log(file);
+
+	     let url = window.URL.createObjectURL(file);
+
+	     // console.log(url)
+
+	     img.src = url
+	}
+
+	inputImg?.addEventListener('change', getImg)
+    </script>
+</body>
+
+
+</html>

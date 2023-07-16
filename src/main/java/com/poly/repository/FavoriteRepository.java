@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.poly.entity.Favorite;
-import com.poly.entity.Product;
-import com.poly.entity.User;
+import com.poly.bean.Favorite;
+import com.poly.bean.Product;
+import com.poly.bean.User;
 
 public interface  FavoriteRepository extends JpaRepository<Favorite, Long> {
 	@Query("SELECT c FROM Favorite c WHERE c.user.id =?1")
