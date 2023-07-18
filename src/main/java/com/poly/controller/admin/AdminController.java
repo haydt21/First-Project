@@ -3,6 +3,8 @@ package com.poly.controller.admin;
 import java.util.List;
 import java.util.Optional;
 
+import javax.websocket.server.PathParam;
+
 import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,26 +32,30 @@ public class AdminController {
 
 	@Autowired
 	ProductService pdao;
+
 	@RequestMapping("/admin/index")
 	public String index() {
 		return "admin/index";
 	}
 
 	@RequestMapping("/admin/manage/users")
-	public String users(Model model, @RequestParam("p") Optional<Integer> p
-//			,@RequestParam("key") String sortField
-			) {
-//		Sort sort = Sort.by(sortField).ascending();
+	public String users(Model model, @RequestParam("p") Optional<Integer> p,
+			@RequestParam(defaultValue = "id", name = "sortField") String sortField,
+			@RequestParam(defaultValue = "asc", name = "sortDir") String sortDir) {
+		Sort sort = sortDir.equals("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending();
 		Pageable pageable;
-		 try {
-		 pageable = PageRequest.of(p.orElse(0), 5);
-		 } catch (Exception e) {
-		 pageable = PageRequest.of(0, 5);
-		 }
-		 Page<User> list = udao.findActiveUsers(pageable);
+		try {
+			pageable = PageRequest.of(p.orElse(0), 5, sort);
+		} catch (Exception e) {
+			pageable = PageRequest.of(0, 5, sort);
+		}
+		Page<User> list = udao.findActiveUsers(pageable);
 //		List<User> list = udao.findActiveUsers();
 		User entity = new User();
+		System.out.println(sortField + ", " + sortDir);
+		model.addAttribute("sortField", sortField);
 		model.addAttribute("list", list);
+		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 		model.addAttribute("user", entity);
 		return "admin/manage/users";
 	}

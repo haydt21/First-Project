@@ -75,6 +75,23 @@
                 </div>
                 <i th:errors="*{role}"></i>
             </div>
+            
+            <div class="form-group">
+                <label>Trạng thái</label>
+                <div class="row">
+                    <div class="form-check form-check-inline mx-5">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" th:field="*{active}"
+                            th:value="true">
+                        <label class="form-check-label">Hoạt động</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" th:field="*{active}"
+                            th:value="false">
+                        <label class="form-check-label">Bị khoá</label>
+                    </div>
+                </div>
+                <i th:errors="*{role}"></i>
+            </div>
             <hr style="max-height: 2px !important;background-color: black;">
 
             <div class="row col-md-12 justify-content-center">
@@ -107,11 +124,11 @@
     <table class="table table-hover mt-1">
         <thead class="table-info">
             <tr>
-                <th th:with="key='id'"><a th:href="@{|/admin/manage/users?sortField=${key}|}">Tài khoản</a></th>
-                <th>Họ tên</th>
+                <th><a th:href="@{|/admin/manage/users?p=${list.number}&sortField=id&sortDir=${reverseSortDir}|}">Tài khoản</a></th>
+                <th><a th:href="@{|/admin/manage/users?p=${list.number}&sortField=fullname&sortDir=${reverseSortDir}|}">Họ tên</a></th>
                 <th>Email</th>
                 <th>Số điện thoại</th>
-                <th>Quyền</th>
+                <th><a th:href="@{|/admin/manage/users?p=${list.number}&sortField=role&sortDir=${reverseSortDir}|}">Quyền</a></th>
                 <th></th>
             </tr>
         </thead>
@@ -135,19 +152,19 @@
                     <li class="page-item"><a class="page-link" href="" style="pointer-events: none;">&lt;</a></li>
                 </th:block>
                 <th:block th:if="${list.number > 0}">
-                    <li class="page-item"><a class="page-link" th:href="@{/admin/manage/users?p=0}">&lt;&lt;</a></li>
-                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number-1}|}">&lt;</a></li>
+                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=0&sortField=${sortField}|}">&lt;&lt;</a></li>
+                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number-1}&sortField=${sortField}|}">&lt;</a></li>
                 </th:block>
                 <th:block th:each="i : ${#numbers.sequence(1, list.totalPages)}">
                     <li class="page-item" >
-                        <a a class="page-link" th:href="@{|/admin/manage/users?p=${i-1}|}">[[${i}]]</a>
+                        <a a class="page-link" th:href="@{|/admin/manage/users?p=${i-1}&sortField=${sortField}|}">[[${i}]]</a>
                     </li>
                 </th:block>
                 <th:block th:if="${list.number < list.totalPages - 1}">
-                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number+1}|}">&gt;</a>
+                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number+1}&sortField=${sortField}|}">&gt;</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                            th:href="@{|/admin/manage/users?p=${list.totalPages-1}|}">&gt;&gt;</a></li>
+                            th:href="@{|/admin/manage/users?p=${list.totalPages-1}&sortField=${sortField}|}">&gt;&gt;</a></li>
                 </th:block>
                 <th:block th:if="${list.number == list.totalPages - 1}">
                     <li class="page-item"><a class="page-link" href=""
