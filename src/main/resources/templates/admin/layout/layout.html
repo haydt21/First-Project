@@ -27,7 +27,7 @@
 
                 <!-- Search Box -->
                 <section class="alt py-3">
-                    <h1 class="text-danger my-4">logo</h1>
+                    <h1 class="text-danger my-4">DAT-CHAN BOOK STORE</h1>
                 </section>
 
                 <!-- Menu -->
@@ -51,23 +51,23 @@
     <script th:src="@{/style/js/owl-carousel.js}"></script>
     <script th:src="@{/style/js/custom.js}"></script>
     <script>
-    const inputImg = document.getElementById('imgInput')
-	const img = document.getElementById('img')
+        const inputImg = document.getElementById('imgInput')
+        const img = document.getElementById('img')
 
-	function getImg(event){
+        function getImg(event) {
 
-	     const file = event.target.files[0]; // 0 = get the first file
+            const file = event.target.files[0]; // 0 = get the first file
 
-	     // console.log(file);
+            // console.log(file);
 
-	     let url = window.URL.createObjectURL(file);
+            let url = window.URL.createObjectURL(file);
 
-	     // console.log(url)
+            // console.log(url)
 
-	     img.src = url
-	}
+            img.src = url
+        }
 
-	inputImg?.addEventListener('change', getImg)
+        inputImg?.addEventListener('change', getImg)
     </script>
 </body>
 

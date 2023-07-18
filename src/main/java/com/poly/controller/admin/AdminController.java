@@ -14,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,31 +34,9 @@ public class AdminController {
 	@Autowired
 	ProductService pdao;
 
-	@RequestMapping("/admin/index")
+	@GetMapping("/admin/index")
 	public String index() {
 		return "admin/index";
-	}
-
-	@RequestMapping("/admin/manage/users")
-	public String users(Model model, @RequestParam("p") Optional<Integer> p,
-			@RequestParam(defaultValue = "id", name = "sortField") String sortField,
-			@RequestParam(defaultValue = "asc", name = "sortDir") String sortDir) {
-		Sort sort = sortDir.equals("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending();
-		Pageable pageable;
-		try {
-			pageable = PageRequest.of(p.orElse(0), 5, sort);
-		} catch (Exception e) {
-			pageable = PageRequest.of(0, 5, sort);
-		}
-		Page<User> list = udao.findActiveUsers(pageable);
-//		List<User> list = udao.findActiveUsers();
-		User entity = new User();
-		System.out.println(sortField + ", " + sortDir);
-		model.addAttribute("sortField", sortField);
-		model.addAttribute("list", list);
-		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
-		model.addAttribute("user", entity);
-		return "admin/manage/users";
 	}
 
 	@RequestMapping("/admin/manage/products")
@@ -74,11 +53,6 @@ public class AdminController {
 		model.addAttribute("list", list);
 		model.addAttribute("user", entity);
 		return "admin/manage/products";
-	}
-
-	@RequestMapping("/admin/manage/bills")
-	public String bills() {
-		return "admin/manage/bills";
 	}
 
 }

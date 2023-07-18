@@ -33,6 +33,28 @@ public class UsersController {
 	@Autowired
 	SessionService session;
 
+	@RequestMapping("/admin/manage/users")
+	public String users(Model model, @RequestParam("p") Optional<Integer> p,
+			@RequestParam(defaultValue = "id", name = "sortField") String sortField,
+			@RequestParam(defaultValue = "asc", name = "sortDir") String sortDir) {
+		Sort sort = sortDir.equals("desc") ? Sort.by(sortField).descending() : Sort.by(sortField).ascending();
+		Pageable pageable;
+		try {
+			pageable = PageRequest.of(p.orElse(0), 5, sort);
+		} catch (Exception e) {
+			pageable = PageRequest.of(0, 5, sort);
+		}
+		Page<User> list = udao.findActiveUsers(pageable);
+		// List<User> list = udao.findActiveUsers();
+		User entity = new User();
+		System.out.println(sortField + ", " + sortDir);
+		model.addAttribute("sortField", sortField);
+		model.addAttribute("list", list);
+		model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+		model.addAttribute("user", entity);
+		return "admin/manage/users";
+	}
+
 	@RequestMapping("/admin/manage/user/getform/{id}")
 	public String getForm(Model model, @ModelAttribute("user") User entity, @PathVariable("id") String id,
 			@RequestParam("p") Optional<Integer> p, Pageable pageable) {
@@ -44,7 +66,7 @@ public class UsersController {
 		entity = udao.findById(id);
 		model.addAttribute("user", entity);
 		Page<User> list = udao.findActiveUsers(pageable);
-//            List<User> list = udao.findActiveUsers();
+		// List<User> list = udao.findActiveUsers();
 		model.addAttribute("list", list);
 		return "admin/manage/users";
 	}
