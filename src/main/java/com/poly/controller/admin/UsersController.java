@@ -7,45 +7,91 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import com.poly.bean.User;
-import com.poly.repository.UserRepository;
+import com.poly.service.SessionService;
 import com.poly.service.UserService;
 
 @Controller
 public class UsersController {
-    
-    @Autowired
-    UserService udao;
 
-    @RequestMapping("/admin/manage/user/getform/{id}")
-		public String getForm(Model model, @ModelAttribute("user") User entity, @PathVariable("id") String id,
-				@RequestParam("p") Optional<Integer> p) {
-			// Pageable pageable;
-			// try {
-			// 	pageable = PageRequest.of(p.orElse(0), 5);
-			// } catch (Exception e) {
-			// 	pageable = PageRequest.of(0, 5);
-			// }
-			entity = udao.findById(id);
-			model.addAttribute("user", entity);
-			// Page<User> list = dao.findAll(pageable);
-            List<User> list = udao.findActiveUsers();
-			model.addAttribute("list", list);
+	@Autowired
+	UserService udao;
+
+	@Autowired
+	SessionService session;
+
+	@RequestMapping("/admin/manage/user/getform/{id}")
+	public String getForm(Model model, @ModelAttribute("user") User entity, @PathVariable("id") String id,
+			@RequestParam("p") Optional<Integer> p, Pageable pageable) {
+		try {
+			pageable = PageRequest.of(p.orElse(0), 5);
+		} catch (Exception e) {
+			pageable = PageRequest.of(0, 5);
+		}
+		entity = udao.findById(id);
+		model.addAttribute("user", entity);
+		Page<User> list = udao.findActiveUsers(pageable);
+//            List<User> list = udao.findActiveUsers();
+		model.addAttribute("list", list);
+		return "admin/manage/users";
+	}
+
+	@RequestMapping("/admin/manage/user/update/{id}")
+	public String update(Model model, @ModelAttribute("user") User entity, @PathVariable("id") String id) {
+		User user = udao.findById(id);
+		entity.setPassword(user.getPassword());
+		entity.setActive(user.getActive());
+		udao.update(entity);
+		return "redirect:/admin/manage/users";
+	}
+
+	@RequestMapping("/admin/manage/user/delete/{id}")
+	public String delete(Model model, @ModelAttribute("user") User entity, @PathVariable("id") String id) {
+		User user = udao.findById(id);
+		entity.setPassword(user.getPassword());
+		entity.setActive(false);
+		udao.delete(entity);
+		return "redirect:/admin/manage/users";
+	}
+
+	@PostMapping("/admin/manage/user/save")
+	public String saveNew(Model model, @Validated @ModelAttribute("user") User users, Errors errors) {
+		if (errors.hasErrors()) {
 			return "admin/manage/users";
 		}
-		
-    @RequestMapping("/admin/manage/user/update/{id}")
-    public String update(Model model, @ModelAttribute("user") User entity) {
-    	udao.update(entity);
-    	return "redirect:/admin/manage/users";
-    }
+		users.setPassword("1");
+		users.setActive(true);
+		users.setRole(true);
+		udao.create(users);
+		return "redirect:/admin/manage/users";
+	}
+
+	@RequestMapping("/admin/manage/users/search")
+	public String seachProduct(Model model, @RequestParam("keyword") Optional<String> name,
+			@RequestParam("p") Optional<Integer> p, @ModelAttribute("user") User entity) {
+		String findName;
+		if (session.getAttribute("keyword") == null) {
+			findName = name.orElse("");
+		} else {
+			findName = name.orElse(session.getAttribute("keyword"));
+		}
+		session.setAttribute("keyword", findName);
+		Pageable pageable = PageRequest.of(p.orElse(0), 5);
+		Page<User> list = udao.findUserByNamePage("%" + findName + "%", pageable);
+		model.addAttribute("list", list);
+		return "admin/manage/users";
+	}
 }

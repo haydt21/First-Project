@@ -3,21 +3,24 @@
 <main>
     <div class="container" style="margin-top: -50px;">
         <h1 class="text-center">Quản lý người dùng</h1>
-        <form method="post" th:object="${user}" class="col-md-8 offset-2 mb-2">
+        <form th:action="@{/admin/manage/user/save}" method="post" th:object="${user}" class="col-md-8 offset-2 mb-2">
 
             <div class="form-group">
                 <label>Tài khoản:</label>
-                <input type="text" class="form-control" th:field="*{id}" disabled="disabled"/>
+                <input type="text" class="form-control" th:field="*{id}" />
+                <i th:errors="*{id}"></i>
             </div>
 
             <div class="form-group">
                 <label>Họ tên:</label>
                 <input type="text" class="form-control" th:field="*{fullname}" />
+                <i th:errors="*{fullname}"></i>
             </div>
 
             <div class="form-group">
                 <label>Email:</label>
                 <input type="email" class="form-control" th:field="*{email}" />
+                <i th:errors="*{email}"></i>
             </div>
 
             <div class="form-group">
@@ -33,73 +36,69 @@
                             th:value="false">
                         <label class="form-check-label">Nữ</label>
                     </div>
+                    <i th:errors="*{gender}"></i>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Ngày sinh:</label>
-                <input type="date" class="form-control" path="birthday" th:field="*{birthday}"/>
+                <input type="date" class="form-control" path="birthday" th:field="*{birthday}" />
+                <i th:errors="*{birthday}"></i>
             </div>
 
             <div class="form-group">
                 <label>Số điện thoại:</label>
-                <input type="text" class="form-control" path="phone" th:field="*{phone}"/>
+                <input type="text" class="form-control" path="phone" th:field="*{phone}" />
+                <i th:errors="*{phone}"></i>
             </div>
 
             <div class="form-group">
                 <label>Địa chỉ:</label>
                 <textarea type="text" class="form-control" path="address" th:field="*{address}">
                             </textarea>
+                <i th:errors="*{address}"></i>
             </div>
 
             <div class="form-group">
                 <label>Quyền:</label>
                 <div class="row">
                     <div class="form-check form-check-inline mx-5">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                        th:field="*{role}" th:value="true">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" th:field="*{role}"
+                            th:value="true">
                         <label class="form-check-label">Quản trị</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                        th:field="*{role}" th:value="false">
+                        <input class="form-check-input" type="radio" name="inlineRadioOptions" th:field="*{role}"
+                            th:value="false">
                         <label class="form-check-label">Người dùng</label>
                     </div>
                 </div>
+                <i th:errors="*{role}"></i>
             </div>
-
-            <div class="form-group">
-                <label>Trạng thái:</label>
-                <div class="row">
-                    <div class="form-check form-check-inline mx-5">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                        th:field="*{active}" th:value="true">
-                        <label class="form-check-label">Đang hoạt động</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="inlineRadioOptions"
-                        th:field="*{active}" th:value="false">
-                        <label class="form-check-label">Vô hiệu hóa</label>
-                    </div>
-                </div>
-            </div>
-
             <hr style="max-height: 2px !important;background-color: black;">
 
             <div class="row col-md-12 justify-content-center">
-                <button th:formaction="@{/admin/manage/user/update/{key}(key=${id})}" class="btn btn-warning mx-3" style="border-radius: 20px;">Cập
+                <button class="btn btn-success" style="border-radius: 20px;">
+                    Thêm</button>
+                <button th:formaction="@{/admin/manage/user/update/{key}(key=${id})}" class="btn btn-warning mx-3"
+                    style="border-radius: 20px;">Cập
                     nhật</button>
-                <button th:formaction="@{/admin/users}" class="btn btn-primary" style="border-radius: 20px;">Làm
+                <button th:formaction="@{/admin/manage/user/delete/{key}(key=${id})}" class="btn btn-danger"
+                    style="border-radius: 20px;">
+                    Xoá</button>
+                <button th:formaction="@{/admin/manage/users}" class="btn btn-primary mx-3"
+                    style="border-radius: 20px;">Làm
                     mới</button>
             </div>
         </form>
     </div>
 
-    <form action="" class="row mt-5">
+    <form action="/admin/manage/users/search" method="POST" class="row mt-5">
         <div class="form-group row col-md-12 justify-content-center">
             <label class="col-form-label"><strong>Tìm kiếm người dùng:</strong></label>
             <div class="col-md-4">
-                <input type="search" class="form-control" placeholder="Nhập tên khách hàng">
+                <input type="search" class="form-control" name="keyword" th:value="${param.keyword}"
+                	placeholder="Nhập tên khách hàng">
             </div>
             <button type="submit" class="btn btn-success">Tìm kiếm</button>
         </div>
@@ -108,64 +107,54 @@
     <table class="table table-hover mt-1">
         <thead class="table-info">
             <tr>
-                <th>Tài khoản</th>
+                <th th:with="key='id'"><a th:href="@{|/admin/manage/users?sortField=${key}|}">Tài khoản</a></th>
                 <th>Họ tên</th>
                 <th>Email</th>
-                <th>Giới tính</th>
-                <th>Ngày sinh</th>
                 <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
                 <th>Quyền</th>
-                <th>Trạng thái</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="u, state:${list}">
+            <tr th:each="u, state:${list.content}">
                 <td>[[${u.id}]]</td>
                 <td>[[${u.fullname}]]</td>
                 <td>[[${u.email}]]</td>
-                <td>[[${u.gender ? 'Nam' : 'Nữ'}]]</td>
-                <td>[[${u.birthday}]]</td>
                 <td>[[${u.phone}]]</td>
-                <td>[[${u.address}]]</td>
                 <td>[[${u.role ? 'Admin' : 'User'}]]</td>
-                <td>[[${u.active ? 'Đang hoạt động' : 'Bị Khoá'}]]</td>
-                <td><a th:href="@{/admin/manage/user/getform/{key}(key=${u.id})}">Sửa</a>|
-                    <a href="">Xóa</a>
+                <td><a th:href="@{/admin/manage/user/getform/{key}(key=${u.id})}">Chi tiết</a>
                 </td>
             </tr>
         </tbody>
     </table>
     <div class="row col-md-12 justify-content-center mb-4">
         <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <c:if test="${list.number == 0}">
+            <ul class="pagination inline">
+                <th:block th:if="${list.number == 0}">
                     <li class="page-item"><a class="page-link" href="" style="pointer-events: none;">&lt;&lt;</a></li>
                     <li class="page-item"><a class="page-link" href="" style="pointer-events: none;">&lt;</a></li>
-                </c:if>
-                <c:if test="${list.number > 0}">
-                    <li class="page-item"><a class="page-link" href="/admin/manage/user?p=0">&lt;&lt;</a></li>
-                    <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number-1}">&lt;</a>
+                </th:block>
+                <th:block th:if="${list.number > 0}">
+                    <li class="page-item"><a class="page-link" th:href="@{/admin/manage/users?p=0}">&lt;&lt;</a></li>
+                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number-1}|}">&lt;</a></li>
+                </th:block>
+                <th:block th:each="i : ${#numbers.sequence(1, list.totalPages)}">
+                    <li class="page-item" >
+                        <a a class="page-link" th:href="@{|/admin/manage/users?p=${i-1}|}">[[${i}]]</a>
                     </li>
-                </c:if>
-                <c:forEach varStatus="i" begin="0" end="${list.totalPages-1}">
-                    <li class="page-item"><a a class="page-link" href="/admin/manage/user?p=${i.index}">${i.index +
-                            1}</a></li>
-                </c:forEach>
-
-                <c:if test="${list.number < list.totalPages - 1}">
-                    <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number+1}">&gt;</a>
+                </th:block>
+                <th:block th:if="${list.number < list.totalPages - 1}">
+                    <li class="page-item"><a class="page-link" th:href="@{|/admin/manage/users?p=${list.number+1}|}">&gt;</a>
                     </li>
                     <li class="page-item"><a class="page-link"
-                            href="/admin/manage/user?p=${list.totalPages-1}">&gt;&gt;</a></li>
-                </c:if>
-                <c:if test="${list.number == list.totalPages - 1}">
-                    <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.number+1}"
+                            th:href="@{|/admin/manage/users?p=${list.totalPages-1}|}">&gt;&gt;</a></li>
+                </th:block>
+                <th:block th:if="${list.number == list.totalPages - 1}">
+                    <li class="page-item"><a class="page-link" href=""
                             style="pointer-events: none;">&gt;</a></li>
-                    <li class="page-item"><a class="page-link" href="/admin/manage/user?p=${list.totalPages-1}"
+                    <li class="page-item"><a class="page-link" href=""
                             style="pointer-events: none;">&gt;&gt;</a></li>
-                </c:if>
+                </th:block>
             </ul>
         </nav>
     </div>

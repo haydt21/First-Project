@@ -3,12 +3,16 @@ package com.poly.controller.admin;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -32,15 +36,18 @@ public class AdminController {
 	}
 
 	@RequestMapping("/admin/manage/users")
-	public String users(Model model, @RequestParam("p") Optional<Integer> p) {
-		// Pageable pageable;
-		// try {
-		// pageable = PageRequest.of(p.orElse(0), 5);
-		// } catch (Exception e) {
-		// pageable = PageRequest.of(0, 5);
-		// }
-		// Page<User> list = udao.findAll(pageable);
-		List<User> list = udao.findActiveUsers();
+	public String users(Model model, @RequestParam("p") Optional<Integer> p
+//			,@RequestParam("key") String sortField
+			) {
+//		Sort sort = Sort.by(sortField).ascending();
+		Pageable pageable;
+		 try {
+		 pageable = PageRequest.of(p.orElse(0), 5);
+		 } catch (Exception e) {
+		 pageable = PageRequest.of(0, 5);
+		 }
+		 Page<User> list = udao.findActiveUsers(pageable);
+//		List<User> list = udao.findActiveUsers();
 		User entity = new User();
 		model.addAttribute("list", list);
 		model.addAttribute("user", entity);
